@@ -92,7 +92,7 @@
                 <div class="bg-white rounded-xl shadow-lg p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                     <div class="space-y-3">
-                        <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700">Add New Product</button>
+                        <button class=<button onclick="addProduct()" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700">Add New Product</button>
                         <button class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700">Start Automation</button>
                         <button class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700">Sync Platforms</button>
                     </div>
@@ -453,7 +453,9 @@
         </div>
     </div>
 
-    <script>
+    <script>const API_URL = 'https://novakart-dashboard.onrender.com';
+
+function showTab(tabName) {
         function showTab(tabName) {
             // Hide all tab contents
             const tabContents = document.querySelectorAll('.tab-content');
@@ -517,7 +519,29 @@
             }, 500);
         }
 
-        function showNotification(message, type) {
+        function showNotification(message, type) {// Add product function
+function addProduct() {
+    fetch(API_URL + '/api/products', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify({
+            name: 'New Product',
+            price: 29.99,
+            inventory: 100
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        showNotification('Product added successfully!', 'success');
+        // Reload products or update UI
+    })
+    .catch(error => {
+        showNotification('Error adding product', 'error');
+    });
+}
             const notification = document.createElement('div');
             notification.className = 'fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ' + 
                 (type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 
